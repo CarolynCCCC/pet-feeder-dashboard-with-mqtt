@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Feeder Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+</head>
+<body>
+    <h1>Pet Feeder Monitoring Dashboard</h1>
+  
+    <!-- Real-time section -->
+    <h2>Current Status</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Weight</td>
+                <td id="current-weight">Loading...</td>
+            </tr>
+            <tr>
+                <td>Food Fullness</td>
+                <td id="current-food-fullness">Loading...</td>
+            </tr>
+            <tr>
+                <td>Water Fullness</td>
+                <td id="current-water-fullness">Loading...</td>
+            </tr>
+            <tr>
+                <td>Temperature</td>
+                <td id="current-temperature">Loading...</td>
+            </tr>
+            <tr>
+                <td>Humidity</td>
+                <td id="current-humidity">Loading...</td>
+            </tr>
+        </tbody>
+    </table>
+  
+    <!-- Historical data section -->
+    <h2>Historical Data</h2>
+    <label for="date-select">Select a Date: </label>
+    <input type="date" id="date-select" onchange="fetchHistoricalData()">
+  
+    <div>
+      <canvas id="foodChart" width="400" height="200"></canvas>
+      <canvas id="temperatureChart" width="400" height="200"></canvas>
+      <canvas id="humidityChart" width="400" height="200"></canvas>
+    </div>
+    <script src="script.js"></script>
+
+</body>
+</html>
