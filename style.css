@@ -46,7 +46,7 @@ tr:hover {
 
 @media (max-width: 600px) {
     body {
-        padding-top: 80px; /* Extra padding for small screens */
+        padding-top: 100px; /* Extra padding for small screens */
         margin: 0px 10px;  /* Reduce margin for better fit on mobile */
     }
 }
