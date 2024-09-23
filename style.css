@@ -43,3 +43,10 @@ th {
 tr:hover {
     background-color: #dbdada;
 }
+
+@media (max-width: 600px) {
+    body {
+        padding-top: 70px; /* Extra padding for small screens */
+        margin: 0px 10px;  /* Reduce margin for better fit on mobile */
+    }
+}

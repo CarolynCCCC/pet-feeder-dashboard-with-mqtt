@@ -49,7 +49,8 @@ function fetchHistoricalData() {
                                     time: `${hourString}:${minuteString}`,
                                     food_fullness_percentage: entry.food_fullness_percentage,
                                     temperature: entry.temperature,
-                                    humidity: entry.humidity
+                                    humidity: entry.humidity,
+                                    weight: entry.weight
                                 });
                             }
                         }
@@ -101,6 +102,43 @@ const foodChart = new Chart(ctxFood, {
         }
     }
 });
+
+const ctxWeight= document.getElementById('eatingChart').getContext('2d');
+const eatingChart = new Chart(ctxWeight, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Food Bowl Weight (g)',
+            data: [],
+            borderColor: 'rgba(255, 255, 0, 1)',
+            fill: false
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'time',
+                time: {
+                    unit: 'hour',
+                    tooltipFormat: 'HH:mm',
+                    displayFormats: {
+                        hour: 'HH:mm'
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Time of Day'
+                }
+            },
+            y: {
+                beginAtZero: true,
+                max: 100
+            }
+        }
+    }
+});
+
 
 const ctxTemperature = document.getElementById('temperatureChart').getContext('2d');
 const temperatureChart = new Chart(ctxTemperature, {
@@ -178,7 +216,7 @@ function setDefaultDate() {
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
     document.getElementById('date-select').value = formattedDate;
-    fetchHistoricalData(); // Fetch today's data by default
+    fetchHistoricalData();
 }
 
 function updateTodayGraph() {
@@ -195,6 +233,7 @@ function updateHistoricalChart(data) {
     });
 
     const foodFullnessData = data.map(entry => entry.food_fullness_percentage);
+    const weightData = data.map(entry => entry.weight);
     const temperatureData = data.map(entry => entry.temperature);
     const humidityData = data.map(entry => entry.humidity);
     
@@ -202,6 +241,11 @@ function updateHistoricalChart(data) {
     foodChart.data.labels = timeLabels;
     foodChart.data.datasets[0].data = foodFullnessData;
     foodChart.update();
+
+    // update weight chart
+    eatingChart.data.labels = timeLabels;
+    eatingChart.data.datasets[0].data = weightData;
+    eatingChart.update();
 
     // Update temperature chart
     temperatureChart.data.labels = timeLabels;
