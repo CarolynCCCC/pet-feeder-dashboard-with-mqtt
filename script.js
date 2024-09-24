@@ -13,15 +13,43 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
+const mqttBroker = 'ws://test.mosquitto.org:8080';
+const clientId = '01c0f074-fd84-47e6-8f57-de6dcf674ca3';
+const client = mqtt.connect(mqttBroker, { clientId });
+
 function fetchCurrentData() {
-    const currentRef = database.ref('current');
-    currentRef.on('value', (snapshot) => {
-        const data = snapshot.val();
-        document.getElementById('current-weight').innerText = data.weight;
-        document.getElementById('current-food-fullness').innerText = data.food_fullness_percentage;
-        document.getElementById('current-water-fullness').innerText = data.water_fullness_percentage;
-        document.getElementById('current-temperature').innerText = data.temperature;
-        document.getElementById('current-humidity').innerText = data.humidity;
+    client.on('connect', () => {
+        console.log('Connected to MQTT broker');
+        client.subscribe('BAIT2123_IOT_PET_FEEDER/weight', (err) => {
+            if (err) console.error('Subscription error: ', err);
+        });
+        client.subscribe('BAIT2123_IOT_PET_FEEDER/food_fullness_percentage', (err) => {
+            if (err) console.error('Subscription error: ', err);
+        });
+        client.subscribe('BAIT2123_IOT_PET_FEEDER/temperature', (err) => {
+            if (err) console.error('Subscription error: ', err);
+        });
+        client.subscribe('BAIT2123_IOT_PET_FEEDER/humidity', (err) => {
+            if (err) console.error('Subscription error: ', err);
+        });
+    });
+
+    client.on('message', (topic, message) => {
+        const value = message.toString();
+        console.log(value)
+        if (topic === 'BAIT2123_IOT_PET_FEEDER/weight') {
+            document.getElementById('current-weight').innerText = value || 0;
+        } else if (topic === 'BAIT2123_IOT_PET_FEEDER/food_fullness_percentage') {
+            document.getElementById('current-food-fullness').innerText = value || 0;
+        } else if (topic === 'BAIT2123_IOT_PET_FEEDER/temperature') {
+            document.getElementById('current-temperature').innerText = value || 0;
+        } else if (topic === 'BAIT2123_IOT_PET_FEEDER/humidity') {
+            document.getElementById('current-humidity').innerText = value || 0;
+        }
+    });
+
+    client.on('error', (error) => {
+        console.error('Connection error: ', error);
     });
 }
 
