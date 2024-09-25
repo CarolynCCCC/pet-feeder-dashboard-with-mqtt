@@ -13,7 +13,7 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
-const mqttBroker = 'ws://test.mosquitto.org:8080';
+const mqttBroker = 'wss://test.mosquitto.org:8081';
 const clientId = '01c0f074-fd84-47e6-8f57-de6dcf674ca3';
 const client = mqtt.connect(mqttBroker, { clientId });
 
