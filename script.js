@@ -32,6 +32,9 @@ function fetchCurrentData() {
         client.subscribe('BAIT2123_IOT_PET_FEEDER/humidity', (err) => {
             if (err) console.error('Subscription error: ', err);
         });
+        client.subscribe('BAIT2123_IOT_PET_FEEDER/water_fullness', (err) => {
+            if (err) console.error('Subscription error: ', err);
+        });
     });
 
     client.on('message', (topic, message) => {
@@ -45,6 +48,8 @@ function fetchCurrentData() {
             document.getElementById('current-temperature').innerText = value || 0;
         } else if (topic === 'BAIT2123_IOT_PET_FEEDER/humidity') {
             document.getElementById('current-humidity').innerText = value || 0;
+         }else if (topic === 'BAIT2123_IOT_PET_FEEDER/water_fullness') {
+            document.getElementById('current-water-fullness').innerText = value || 0;
         }
     });
 
