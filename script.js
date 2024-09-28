@@ -27,7 +27,7 @@ function resizeCanvases() {
     waterCanvas.height = waterCanvas.clientHeight;
 }
 
-function drawGauge(canvas, value, maxValue, gaugeColor) {
+function drawGauge(canvas, value, maxValue) {
     const ctx = canvas.getContext('2d');
     const radius = Math.min(canvas.width, canvas.height) / 2;
     const centerX = canvas.width / 2;
@@ -36,6 +36,15 @@ function drawGauge(canvas, value, maxValue, gaugeColor) {
     const endAngle = Math.PI * 2;
     const percentage = value / maxValue;
     const angle = startAngle + (endAngle - startAngle) * percentage;
+
+    let gaugeColor;
+    if (percentage < 0.33) { // Low value range (0% - 33%)
+        gaugeColor = '#ff4d4d'; // Red
+    } else if (percentage < 0.66) { // Medium value range (34% - 66%)
+        gaugeColor = '#ffcc00'; // Yellow
+    } else { // High value range (67% - 100%)
+        gaugeColor = '#4dff4d'; // Green
+    }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -90,9 +99,11 @@ function fetchCurrentData() {
                 break;
             case 'BAIT2123_IOT_PET_FEEDER/temperature':
                 document.getElementById('current-temperature').innerText = `${value}°C` || 0;
+                updateIconColors(value, 'temp');
                 break;
             case 'BAIT2123_IOT_PET_FEEDER/humidity':
                 document.getElementById('current-humidity').innerText = `${value}%` || 0;
+                updateIconColors(value, 'hum');
                 break;
             case 'BAIT2123_IOT_PET_FEEDER/water_fullness':
                 document.getElementById('water-value').innerText = `${value}%` || 0;
@@ -107,11 +118,34 @@ function fetchCurrentData() {
     });
 }
 
+function updateIconColors(value, updateField) {
+    const icon = document.querySelector(`.${updateField}-icon`);
+    console.log(icon);
+
+    if (updateField === 'temp') {
+        if (value < 15) { // Low temperature threshold
+            icon.className = 'temp-icon temp-low fas fa-thermometer-half'; // Set class for low temperature
+        } else if (value < 30) { // Normal temperature range
+            icon.className = 'temp-icon temp-normal fas fa-thermometer-half'; // Set class for normal temperature
+        } else { // High temperature threshold
+            icon.className = 'temp-icon temp-high fas fa-thermometer-half'; // Set class for high temperature
+        }
+    } else if (updateField === 'hum') {
+        if (value < 30) {
+            icon.className = 'hum-icon hum-low fas fa-tint'; // Set class for low humidity
+        } else if (value < 60) { // Normal humidity range
+            icon.className = 'hum-icon hum-normal fas fa-tint'; // Set class for normal humidity
+        } else { // High humidity threshold
+            icon.className = 'hum-icon hum-high fas fa-tint'; // Set class for high humidity
+        }
+    }
+}
+
 // Function to update the gauge value
 function updateGauge(gaugeId, value) {
     const gauge = document.getElementById(gaugeId);
     if (gauge) {
-        drawGauge(gauge, parseFloat(value), 100, gaugeId === 'food-gauge' ? '#4caf50' : '#2196f3');
+        drawGauge(gauge, parseFloat(value), 100);
     }
 }
 

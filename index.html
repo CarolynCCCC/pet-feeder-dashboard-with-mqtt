@@ -13,87 +13,97 @@
     <script src="https://cdn.jsdelivr.net/npm/mqtt/dist/mqtt.min.js"></script>
 </head>
 <body>
-    <h1>Pet Feeder Monitoring Dashboard</h1>
-  
-    <!-- Real-time section -->
-    <h2>Current Status</h2>
-    <div class="dashboard">
-        <div class="card">
-            <h3>Food Fullness</h3>
-            <div class="gauge-container">
-                <canvas id="food-gauge"></canvas>
-                <div class="value" id="food-value">0%</div>
+    <h1>
+        <img src="icon.png" alt="Logo" class="header-icon">
+        Pet Feeder Monitoring Dashboard
+        <span class="underline"></span>
+    </h1>
+    
+    <div class="background">
+        <div class="content">
+        <h2>Current Status</h2>
+        <div class="dashboard">
+            <div class="card">
+                <h3>Food Fullness</h3>
+                <div class="gauge-container">
+                    <canvas id="food-gauge"></canvas>
+                    <div class="value" id="food-value">Loading</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Water Fullness</h3>
+                <div class="gauge-container">
+                    <canvas id="water-gauge"></canvas>
+                    <div class="value" id="water-value">Loading</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>TEMPERATURE</h3>
+                <div class="gauge-container">
+                    <i class="temp-icon fas fa-thermometer-half"></i> 
+                    <canvas id="temp-gauge"></canvas>
+                    <div class="value" id="current-temperature">Loading...</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>HUMIDITY</h3>
+                <div class="gauge-container">
+                    <i class="hum-icon fas fa-tint"></i> 
+                    <canvas id="hum-gauge"></canvas>
+                    <div class="value" id="current-humidity">Loading...</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Food Bowl Weight</h3>
+                <div class="gauge-container">
+                    <i class="fas fa-weight-hanging"></i> 
+                    <canvas id="weight-gauge"></canvas>
+                    <div class="value" id="current-weight">Loading...</div>
+                </div>
             </div>
         </div>
 
-        <div class="card">
-            <h3>Water Fullness</h3>
-            <div class="gauge-container">
-                <canvas id="water-gauge"></canvas>
-                <div class="value" id="water-value">0%</div>
-            </div>
-        </div>
 
-        <div class="card">
-            <h3>Temperature</h3>
-            <div class="gauge-container">
-                <i class="fas fa-thermometer-half temp-icon"></i> 
-                <canvas id="temp-gauge"></canvas>
-                <div class="value" id="current-temperature">Loading...</div>
-            </div>
+        <div class="history">
+            <h2>Historical Data</h2>
+            <label for="date-select">Select a Date: </label>
+            <input type="date" id="date-select" onchange="fetchHistoricalData()">
+        
+            <div class="charts-container">
+                <div class="chart-row">
+                    <div class="chart-title-card">
+                        <h3>Food Chart</h3>
+                    </div>
+                    <canvas id="foodChart" class="chart"></canvas>
+                </div>
+                <div class="chart-row">
+                    <div class="chart-title-card">
+                        <h3>Eating Chart</h3>
+                    </div>
+                    <canvas id="eatingChart" class="chart"></canvas>
+                </div>
+                <div class="chart-row">
+                    <div class="chart-title-card">
+                        <h3>Temperature Chart</h3>
+                    </div>
+                    <canvas id="temperatureChart" class="chart"></canvas>
+                </div>
+                <div class="chart-row">
+                    <div class="chart-title-card">
+                        <h3>Humidity Chart</h3>
+                    </div>
+                    <canvas id="humidityChart" class="chart"></canvas>
+                </div>
+                
         </div>
+    </div>
 
-        <div class="card">
-            <h3>Humidity</h3>
-            <div class="gauge-container">
-                <i class="fas fa-tint hum-icon"></i> 
-                <canvas id="hum-gauge"></canvas>
-                <div class="value" id="current-humidity">Loading...</div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h3>Food Bowl Weight</h3>
-            <div class="gauge-container">
-                <i class="fas fa-weight-hanging"></i> 
-                <canvas id="weight-gauge"></canvas>
-                <div class="value" id="current-weight">Loading...</div>
-            </div>
-        </div>
     </div>
     
-  
-    <!-- Historical data section -->
-    <h2>Historical Data</h2>
-    <label for="date-select">Select a Date: </label>
-    <input type="date" id="date-select" onchange="fetchHistoricalData()">
-  
-    <div class="charts-container">
-        <div class="chart-row">
-            <div class="chart-title-card">
-                <h3>Food Chart</h3>
-            </div>
-            <canvas id="foodChart" class="chart"></canvas>
-        </div>
-        <div class="chart-row">
-            <div class="chart-title-card">
-                <h3>Temperature Chart</h3>
-            </div>
-            <canvas id="temperatureChart" class="chart"></canvas>
-        </div>
-        <div class="chart-row">
-            <div class="chart-title-card">
-                <h3>Humidity Chart</h3>
-            </div>
-            <canvas id="humidityChart" class="chart"></canvas>
-        </div>
-        <div class="chart-row">
-            <div class="chart-title-card">
-                <h3>Eating Chart</h3>
-            </div>
-            <canvas id="eatingChart" class="chart"></canvas>
-        </div>
-    </div>
     <script src="script.js"></script>
 
 </body>
