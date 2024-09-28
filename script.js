@@ -17,46 +17,104 @@ const mqttBroker = 'wss://test.mosquitto.org:8081';
 const clientId = '01c0f074-fd84-47e6-8f57-de6dcf674ca3';
 const client = mqtt.connect(mqttBroker, { clientId });
 
+
+function resizeCanvases() {
+    const foodCanvas = document.getElementById('food-gauge');
+    const waterCanvas = document.getElementById('water-gauge');
+    foodCanvas.width = foodCanvas.clientWidth;
+    foodCanvas.height = foodCanvas.clientHeight;
+    waterCanvas.width = waterCanvas.clientWidth;
+    waterCanvas.height = waterCanvas.clientHeight;
+}
+
+function drawGauge(canvas, value, maxValue, gaugeColor) {
+    const ctx = canvas.getContext('2d');
+    const radius = Math.min(canvas.width, canvas.height) / 2;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const startAngle = Math.PI;
+    const endAngle = Math.PI * 2;
+    const percentage = value / maxValue;
+    const angle = startAngle + (endAngle - startAngle) * percentage;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius - 10, startAngle, endAngle);
+    ctx.lineWidth = 20;
+    ctx.strokeStyle = '#e0e0e0';
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius - 10, startAngle, angle);
+    ctx.lineWidth = 20;
+    ctx.strokeStyle = gaugeColor;
+    ctx.stroke();
+}
+
 function fetchCurrentData() {
+    // Connect to MQTT broker
     client.on('connect', () => {
         console.log('Connected to MQTT broker');
-        client.subscribe('BAIT2123_IOT_PET_FEEDER/weight', (err) => {
-            if (err) console.error('Subscription error: ', err);
-        });
-        client.subscribe('BAIT2123_IOT_PET_FEEDER/food_fullness_percentage', (err) => {
-            if (err) console.error('Subscription error: ', err);
-        });
-        client.subscribe('BAIT2123_IOT_PET_FEEDER/temperature', (err) => {
-            if (err) console.error('Subscription error: ', err);
-        });
-        client.subscribe('BAIT2123_IOT_PET_FEEDER/humidity', (err) => {
-            if (err) console.error('Subscription error: ', err);
-        });
-        client.subscribe('BAIT2123_IOT_PET_FEEDER/water_fullness', (err) => {
-            if (err) console.error('Subscription error: ', err);
+
+        // Subscribe to all necessary topics
+        const topics = [
+            'BAIT2123_IOT_PET_FEEDER/weight',
+            'BAIT2123_IOT_PET_FEEDER/food_fullness_percentage',
+            'BAIT2123_IOT_PET_FEEDER/temperature',
+            'BAIT2123_IOT_PET_FEEDER/humidity',
+            'BAIT2123_IOT_PET_FEEDER/water_fullness'
+        ];
+
+        topics.forEach(topic => {
+            client.subscribe(topic, (err) => {
+                if (err) console.error(`Subscription error for topic ${topic}: `, err);
+            });
         });
     });
 
+    // Handle incoming messages
     client.on('message', (topic, message) => {
-        const value = message.toString();
-        console.log(value)
-        if (topic === 'BAIT2123_IOT_PET_FEEDER/weight') {
-            document.getElementById('current-weight').innerText = value || 0;
-        } else if (topic === 'BAIT2123_IOT_PET_FEEDER/food_fullness_percentage') {
-            document.getElementById('current-food-fullness').innerText = value || 0;
-        } else if (topic === 'BAIT2123_IOT_PET_FEEDER/temperature') {
-            document.getElementById('current-temperature').innerText = value || 0;
-        } else if (topic === 'BAIT2123_IOT_PET_FEEDER/humidity') {
-            document.getElementById('current-humidity').innerText = value || 0;
-         }else if (topic === 'BAIT2123_IOT_PET_FEEDER/water_fullness') {
-            document.getElementById('current-water-fullness').innerText = value || 0;
+        const value = parseFloat(message.toString()).toFixed(2); // Ensure two decimal places
+
+        console.log(`Received from ${topic}: ${value}`);
+
+        // Update respective elements based on the topic
+        switch (topic) {
+            case 'BAIT2123_IOT_PET_FEEDER/weight':
+                document.getElementById('current-weight').innerText = `${value} g` || 0;
+                break;
+            case 'BAIT2123_IOT_PET_FEEDER/food_fullness_percentage':
+                document.getElementById('food-value').innerText =`${value}%` || 0;
+                updateGauge('food-gauge', value);
+                break;
+            case 'BAIT2123_IOT_PET_FEEDER/temperature':
+                document.getElementById('current-temperature').innerText = `${value}°C` || 0;
+                break;
+            case 'BAIT2123_IOT_PET_FEEDER/humidity':
+                document.getElementById('current-humidity').innerText = `${value}%` || 0;
+                break;
+            case 'BAIT2123_IOT_PET_FEEDER/water_fullness':
+                document.getElementById('water-value').innerText = `${value}%` || 0;
+                updateGauge('water-gauge', value); // Update gauge dynamically
+                break;
         }
     });
 
+    // Error handling for the client
     client.on('error', (error) => {
         console.error('Connection error: ', error);
     });
 }
+
+// Function to update the gauge value
+function updateGauge(gaugeId, value) {
+    const gauge = document.getElementById(gaugeId);
+    if (gauge) {
+        drawGauge(gauge, parseFloat(value), 100, gaugeId === 'food-gauge' ? '#4caf50' : '#2196f3');
+    }
+}
+
 
 function fetchHistoricalData() {
     const dateInput = document.getElementById('date-select').value;
@@ -108,8 +166,10 @@ const foodChart = new Chart(ctxFood, {
         datasets: [{
             label: 'Food Fullness (%)',
             data: [],
-            borderColor: 'rgba(75, 192, 192, 1)',
-            fill: false
+            borderColor: '#4caf50',
+            fill: false,
+            pointRadius: 0,
+            spanGaps: true
         }]
     },
     options: {
@@ -144,8 +204,10 @@ const eatingChart = new Chart(ctxWeight, {
         datasets: [{
             label: 'Food Bowl Weight (g)',
             data: [],
-            borderColor: 'rgba(255, 255, 0, 1)',
-            fill: false
+            borderColor: 'grey',
+            fill: false,
+            pointRadius: 0,
+            spanGaps: true
         }]
     },
     options: {
@@ -166,7 +228,7 @@ const eatingChart = new Chart(ctxWeight, {
             },
             y: {
                 beginAtZero: true,
-                max: 100
+                max: 20
             }
         }
     }
@@ -181,8 +243,10 @@ const temperatureChart = new Chart(ctxTemperature, {
         datasets: [{
             label: 'Temperature (°C)',
             data: [],
-            borderColor: 'rgba(255, 99, 132, 1)',
-            fill: false
+            borderColor: 'orange',
+            fill: false,
+            pointRadius: 0,
+            spanGaps: true
         }]
     },
     options: {
@@ -203,7 +267,7 @@ const temperatureChart = new Chart(ctxTemperature, {
             },
             y: {
                 beginAtZero: true,
-                max: 100
+                max: 50
             }
         }
     }
@@ -217,8 +281,10 @@ const humidityChart = new Chart(ctxHumidity, {
         datasets: [{
             label: 'Humidity (%)',
             data: [],
-            borderColor: 'rgba(54, 162, 235, 1)',
-            fill: false
+            borderColor: 'blue',
+            fill: false,
+            pointRadius: 0,
+            spanGaps: true
         }]
     },
     options: {
@@ -247,11 +313,11 @@ const humidityChart = new Chart(ctxHumidity, {
 
 function setDefaultDate() {
     const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+    const utcPlus8 = new Date(today.getTime() + (8 * 60 * 60 * 1000));
+    const formattedDate = utcPlus8.toISOString().split('T')[0]; // Format as YYYY-MM-DD
     document.getElementById('date-select').value = formattedDate;
     fetchHistoricalData();
 }
-
 function updateTodayGraph() {
     const dateInput = document.getElementById('date-select').value;
     if (dateInput) {
@@ -293,8 +359,7 @@ function updateHistoricalChart(data) {
 
 window.onload = function() {
     fetchCurrentData();
-    setDefaultDate(); // Set the default date and fetch today's data
-    
-    // Update today's graph every minute
-    setInterval(updateTodayGraph, 60000); // 60000 ms = 1 minute
+    setDefaultDate();
+    resizeCanvases();
+    setInterval(updateTodayGraph, 60000);
 };

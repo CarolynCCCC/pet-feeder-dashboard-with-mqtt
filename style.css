@@ -1,3 +1,27 @@
+@import url('https://fonts.cdnfonts.com/css/pf-dindisplay-pro');
+
+@font-face {
+    font-family: 'PFDinDisplayPro-Regular';
+    font-style: normal;
+    font-weight: normal;
+    src: url('fonts/PFDinDisplayPro-Regular.woff');
+}
+
+@font-face {
+    font-family: 'PFDinDisplayPro-Thin';
+    font-style: normal;
+    font-weight: normal;
+    src: url('fonts/PFDinDisplayPro-Thin.woff');
+}
+
+
+@font-face {
+font-family: 'PFDinDisplayPro-Bold';
+font-style: normal;
+font-weight: normal;
+src: url('PFDinDisplayPro-Bold.woff');
+}
+
 h1 {
     margin: 0;
     text-align: center;
@@ -6,56 +30,163 @@ h1 {
     top: 0;         
     left: 0;       
     right: 0;    
-    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-family:'PF DinDisplay Pro', sans-serif;
     z-index: 1000;  
     padding: 10px;  
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
 body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'PFDinDisplayPro-Thin', sans-serif;
     margin: 0px 100px 50px 100px;
     padding-top:50px;
     background-color: #f4f4f4;
 }
+
 h2 {
     color: #333;
 }
+
 .dashboard {
-    background: white;
-    padding: 30px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 0 auto;
 }
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
+
+
+.temp-icon {
+    color: orange; /* Orange for temperature icon */
+}
+
+.hum-icon {
+    color: blue; /* Blue for humidity icon */
+}
+
+.card {
     background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    display: flex; /* Use flexbox for centering */
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
 }
-th, td {
-    border: 1px solid #ccc;
-    padding: 12px;
-    text-align: left;
+
+.card i {
+    margin-top:10%;
+    font-size: 30px;
 }
-th {
-    background-color: #ea8999;
-    color: black;
+
+.gauge-container {
+    display: flex; /* Use flexbox for the gauge container */
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center; /* Center items vertically */
+    align-items: center; /* Center items horizontally */
+    position: relative;
+    width: 80%; /* Adjust width as needed */
+    height: auto; /* Let height adjust based on content */
 }
-tr:hover {
-    background-color: #dbdada;
+
+canvas {
+    width: 100%;
+    height: auto;
 }
+
+.value {
+    position: absolute;
+    top: 65%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px; /* Smaller font size for values */
+    font-weight: bold;
+}
+
+.charts-container {
+    display: grid; /* Use grid for layout */
+    grid-template-columns: repeat(auto-fit, minmax(600px, 1fr)); /* Responsive grid */
+    gap: 20px; /* Space between charts */
+    margin-top: 20px; /* Space above the charts */
+}
+
+.chart-wrapper {
+    display: flex;
+    flex-direction: column; /* Arrange title and chart vertically */
+    height: 250px; /* Set a fixed height for the wrapper */
+    position: relative; /* For absolute positioning of titles */
+}
+
+.chart-title {
+    font-size: 1.2em; /* Font size for titles */
+    margin: 0; /* Remove default margin */
+    padding: 5px; /* Padding for spacing */
+}
+
+.left {
+    align-self: flex-start; /* Align title to the left */
+}
+
+.right {
+    align-self: flex-end; /* Align title to the right */
+}
+
+.chart {
+    background-color: white; /* Optional: add a background for the charts */
+    border-radius: 12px; /* Round the corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Shadow for better visibility */
+    width: 100%; /* Make the chart take the full width of its container */
+    height: 200px; /* Fixed height for better aspect ratio */
+    max-width: 100%; /* Prevent overflow */
+}
+
 
 @media (max-width: 1024px) {
     body {
         padding-top: 50px; /* Extra padding for small screens */
         margin: 0px 10px;  /* Reduce margin for better fit on mobile */
     }
+
+    .dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+        margin: 0 auto;
+    }
 }
 
-@media (max-width: 600px) {
+
+@media (max-width: 768px) {
     body {
         padding-top: 100px; /* Extra padding for small screens */
         margin: 0px 10px;  /* Reduce margin for better fit on mobile */
+    }
+
+    .dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 20px;
+        margin: 0 auto;
+    }
+
+    .card {
+        padding: 5px;
+    }
+
+    .card i {
+        font-size: 30px; /* Reduce icon size */
+    }
+
+    .value {
+        font-size: 28px;
+    }
+
+    .charts-container {
+        display: grid; /* Use grid for layout */
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); /* Responsive grid */
+        gap: 20px; /* Space between charts */
+        margin-top: 20px; /* Space above the charts */
     }
 }
 
@@ -63,5 +194,31 @@ tr:hover {
     body {
         padding-top: 120px; /* Extra padding for small screens */
         margin: 0px 10px;  /* Reduce margin for better fit on mobile */
+    }
+
+    .dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 15px;
+        margin: 0 auto;
+    }
+
+    .card {
+        padding: 5px;
+    }
+
+    .card i {
+        font-size: 25px; 
+    }
+
+    .value {
+        font-size: 20px;
+    }
+
+    .charts-container {
+        display: grid; /* Use grid for layout */
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+        gap: 20px; 
+        margin-top: 20px; 
     }
 }
