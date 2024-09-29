@@ -29,7 +29,7 @@ function resizeCanvases() {
 
 function drawGauge(canvas, value, maxValue) {
     const ctx = canvas.getContext('2d');
-    const radius = Math.min(canvas.width, canvas.height) / 2;
+    const radius = Math.min(canvas.width, canvas.height) / 2.5;
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     const startAngle = Math.PI;
