@@ -127,7 +127,34 @@ h2 {
     justify-content: center; /* Center vertically */
     border: 1px solid #e0e0e0;
     align-items: center; /* Center horizontally */
+    position: relative; /* Make the card relative for the pseudo-element */
+    overflow: hidden; /* Hide the icon when it's behind the card */
+    transition: all .5s ease; /* Smooth transition on hover */
 }
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    transition: all .5s ease;
+}
+
+/* Animal icon that pops up on hover */
+.card::before {
+    content: "\1F431"; /* Unicode for a cat emoji (you can replace this with other icons) */
+    position: absolute;
+    top: 100%; /* Initially below the card */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 40px; /* Adjust icon size */
+    opacity: 0; /* Make the icon invisible initially */
+    transition: top 0.5s ease, opacity 0.5s ease; /* Smooth transition */
+}
+
+.card:hover::before {
+    top: -20px; /* Pop up above the card on hover */
+    opacity: 1; /* Make the icon visible */
+}
+
 
 .card h3 {
     position: relative;
@@ -140,11 +167,6 @@ h2 {
     border-bottom: 2px solid black;
 }
 
-.card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    transition: all .5s ease;
-}
 
 .card i {
     margin-top:10%;
@@ -269,7 +291,6 @@ canvas {
 
 }
 
-    
 
 @media (max-width: 768px) {
     body {
