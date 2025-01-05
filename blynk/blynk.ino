@@ -1,15 +1,15 @@
-#define BLYNK_TEMPLATE_ID "TMPL6nzfqMilE"
-#define BLYNK_TEMPLATE_NAME "IOT ASG"
-#define BLYNK_AUTH_TOKEN "iZ2PtUzaHi1QhRCuzo8swxTuoorWPioO"
+#define BLYNK_TEMPLATE_ID "xxxxxxxxxxxxx"
+#define BLYNK_TEMPLATE_NAME "IOT Pet Feeder"
+#define BLYNK_AUTH_TOKEN "xxxxxxxxxxxxxxxxxxx"
 #define BLYNK_PRINT Serial
 #define DHT_TYPE DHT11
 #define DHT_PIN 21
 
 // Firebase details
-#define API_KEY "AIzaSyDqQnnyfqtBZWIzv_E3_FvvbjpnUu4JU_w"
-#define DATABASE_URL "https://iotfirebase-69ec6-default-rtdb.firebaseio.com/"
-#define USERNAME "carolynchai1998@gmail.com"
-#define PWD "jesusloveme"
+#define API_KEY "####################"
+#define DATABASE_URL "##############33"
+#define USERNAME "##########3"
+#define PWD "###########333"
 
 // Ultrasonic sensor and feeder parameters
 
