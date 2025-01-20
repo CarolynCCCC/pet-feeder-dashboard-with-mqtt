@@ -67,7 +67,7 @@ body {
 
 body:after {
     content:'';
-    background-image: url('all.jpg');
+    background-image: url('assets/all.jpg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
