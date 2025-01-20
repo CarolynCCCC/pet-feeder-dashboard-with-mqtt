@@ -1,9 +1,0 @@
-raspberry pi -> firebase
-- ultraFood
-- weight
-- temp and hum
-- ultraWater -> send signal 1 / 0 to relay
-
-
-firebase -> esp32
-- 
