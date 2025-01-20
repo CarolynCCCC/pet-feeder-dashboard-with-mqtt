@@ -1,12 +1,12 @@
 const firebaseConfig = {
-    apiKey: "AIzaSyDqQnnyfqtBZWIzv_E3_FvvbjpnUu4JU_w",
-    authDomain: "iotfirebase-69ec6.firebaseapp.com",
-    databaseURL: "https://iotfirebase-69ec6-default-rtdb.firebaseio.com",
-    projectId: "iotfirebase-69ec6",
-    storageBucket: "iotfirebase-69ec6.appspot.com",
-    messagingSenderId: "35307327120",
-    appId: "1:35307327120:web:81f7323cf8fe1334ddd215",
-    measurementId: "G-MQYY16M3P1"
+    apiKey: "",
+    authDomain: "",
+    databaseURL: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: "",
+    measurementId: ""
 };
 
 // Initialize Firebase
